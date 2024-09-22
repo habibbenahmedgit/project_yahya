@@ -1,0 +1,3 @@
+var m =10;
+const k =20;
+var x = 100;
