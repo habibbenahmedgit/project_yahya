@@ -1,3 +1,78 @@
-var m =10;
-const k =20;
-var x = 100;
+import * as React from "react";
+import {Button, Form, Input, InputNumber} from "antd";
+import {gql, useMutation} from "@apollo/react-hooks";
+import {toast, ToastContainer} from "react-toastify";
+
+
+export const ADD_CLIENT = gql`
+
+    mutation  addClient($firastName:String!,$lastName:String!,$credit:Float!,$telephone:String!){
+        addClient(firastName:$firastName,lastName:$lastName,credit:$credit,telephone:$telephone){
+            firastName
+            lastName
+            credit
+            telephone
+        }
+
+    }
+`
+
+
+const AddClient = () => {
+
+
+    const [addClient] = useMutation(ADD_CLIENT)
+
+    const [form] = Form.useForm();
+
+    const handlleValide = () => {
+        const value = form.getFieldsValue();
+
+        if (value.firastName && value.lastName && value.credit && value.telephone != undefined) {
+            const firastName = value.firastName;
+            const lastName = value.lastName;
+            const credit = value.credit;
+            const telephone = value.telephone;
+
+            addClient({
+                variables: {firastName, lastName, credit, telephone}
+            });
+            toast.success("Success");
+        }else {
+            toast.error("Error, value is undefined",{
+                autoClose:false
+            });
+        }
+
+
+    }
+
+    return (
+
+        <>
+            <div className={"div-image"}>
+                <img style={{marginLeft:"80px"}} src={"https://img.freepik.com/vecteurs-libre/illustration-concept-confirmee_114360-496.jpg?ga=GA1.1.466868023.1724785670&semt=ais_hybrid"} />
+            </div>
+                <div className="div-clients">
+                    <Form form={form}>
+                        <Form.Item style={{marginLeft:"20px",marginTop:"20px"}} label="firastName" name="firastName">
+                            <Input className="firastName" placeholder="firastName"/>
+                        </Form.Item>
+                        <Form.Item style={{marginLeft:"20px",marginTop:"20px"}} label="lastName" name="lastName" >
+                            <Input className="lastName" placeholder="lastName"/>
+                        </Form.Item>
+                        <Form.Item style={{marginLeft:"20px",marginTop:"20px"}} label="credit" name="credit" >
+                            <InputNumber className="credit"  placeholder="credit"/>
+                        </Form.Item>
+                        <Form.Item style={{marginLeft:"20px",marginTop:"20px"}} label="telephone" name="telephone" >
+                            <Input className="telephone" placeholder="telephone"/>
+                        </Form.Item>
+                    </Form>
+                    <ToastContainer />
+                
+                </div>
+
+        </>
+    )
+}
+export default AddClient;
