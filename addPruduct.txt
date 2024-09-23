@@ -1,1 +1,4 @@
-var x = "maynam"
+var x = "maynam";
+var r = 12;
+var j = x + r;
+<bouton>add<bouton>
