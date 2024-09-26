@@ -1,0 +1,87 @@
+import * as React from "react";
+import {Button, Form, Input, InputNumber} from "antd";
+import {gql,useMutation} from "@apollo/react-hooks";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
+export const ADD_FOURNISSEUR = gql`
+    mutation addFournisseur($firstName:String!,$lastName:String!,$creditFournisseur:Float!,$telephoneFournisseur:String!,$villeFournisseur:String!,$emailFournisseur:String!){
+        addFournisseur(firstName:$firstName,lastName:$lastName,creditFournisseur:$creditFournisseur,telephoneFournisseur:$telephoneFournisseur,villeFournisseur:$villeFournisseur,emailFournisseur:$emailFournisseur){
+            firstName
+            lastName
+            creditFournisseur
+            telephoneFournisseur
+            villeFournisseur
+            emailFournisseur
+        }
+    }
+`
+
+
+const AddFernesseur = () => {
+    const [addFournisseur] = useMutation(ADD_FOURNISSEUR);
+
+    const [form] = Form.useForm();
+
+    const handleAddFournisseur = () => {
+        const value = form.getFieldsValue();
+
+        if (value.firstName && value.lastName && value.creditFournisseur && value.telephoneFournisseur && value.villeFournisseur && value. emailFournisseur != undefined) {
+            const firstName = value.firstName
+            const lastName = value.lastName
+            const creditFournisseur = value.creditFournisseur
+            const telephoneFournisseur = value.telephoneFournisseur
+            const villeFournisseur = value.villeFournisseur
+            const emailFournisseur = value. emailFournisseur
+
+            addFournisseur({
+                variables :{firstName,lastName,creditFournisseur,telephoneFournisseur,villeFournisseur,emailFournisseur}
+            });
+            toast.success("Success");
+        }else {
+            toast.error("Error, value is undefined",{
+                autoClose:false
+            });
+        }
+    }
+
+
+    return (
+        <>
+            <div>
+                <div className="Informations-fournisseur">
+                    <Form form={form}>
+                        <Form.Item style={{marginTop: "20px",marginLeft:"45px"}} label="FirstName" name={"firstName"}>
+                            <Input className="FirstName-fournisseur" placeholder="FirstName" type={"text"}/>
+                        </Form.Item>
+
+                        <Form.Item style={{marginTop: "20px",marginLeft:"45px"}} label="LastName" name={"lastName"}>
+                            <Input className="lastName-fournisseur" placeholder="LastName" type={"text"}/>
+                        </Form.Item>
+
+                        <Form.Item style={{marginTop: "20px",marginLeft:"30px"}} label="VilleFournisseur" name={"villeFournisseur"}>
+                            <Input className="ville-fournisseur" placeholder="VilleFournisseur" type={"text"}/>
+                        </Form.Item>
+
+                        <Form.Item style={{marginTop: "20px",marginLeft:"20px"}} label="TelephoneFournisseur" name={"telephoneFournisseur"}>
+                            <Input className="telephone-fournisseur" placeholder="TelephoneFournisseur" type={"text"}/>
+                        </Form.Item>
+
+                        <Form.Item style={{marginTop: "20px",marginLeft:"30px"}} label="EmailFournisseur" name={"emailFournisseur"}>
+                            <Input className="email-fournisseur" placeholder="EmailFournisseur" type={"text"}/>
+                        </Form.Item>
+
+                        <Form.Item style={{marginTop: "20px",marginLeft:"25px"}} label="CreditFournisseur" name={"creditFournisseur"}>
+                            <InputNumber className="credit-fournisseur" placeholder="CreditFournisseur"/>
+                        </Form.Item>
+                    </Form>
+                    <ToastContainer />
+                    <Button className="Button-fournisseur" onClick={handleAddFournisseur}>Valide</Button>
+                </div>
+            </div>
+        </>
+    )
+
+}
+export default AddFernesseur;
